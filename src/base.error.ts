@@ -8,11 +8,6 @@ export abstract class BaseError extends Error {
   public readonly code: ErrorCodeType;
 
   constructor(message?: string, error?: Error, opts?: ErrorOptions) {
-    /* Validation phase */
-    if (isNonEmptyString(message) === false) {
-      throw new Error(`The message property should be a non-empty string.`);
-    }
-
     /* Initialization phase */
     super(message);
 
