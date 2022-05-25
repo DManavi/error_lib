@@ -1,4 +1,4 @@
-# Packaged
+# error-lib
 
 [![NPM version][npm-image]](https://npmjs.org/package/error-lib)
 [![NPM downloads][downloads-image]](https://npmjs.org/package/error-lib)
