@@ -2,6 +2,7 @@
  * Module entry point
  */
 
+
 import { ApplicationError } from './application_error';
 import { HttpBadRequest } from './http_bad_request';
 import { ErrorBase } from './error_base';

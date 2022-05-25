@@ -2,59 +2,64 @@
  * Error base class
  */
 
-import { getEitherDefaultOrPredefinedErrorMessage } from './util';
+import {
+  getEitherDefaultOrPredefinedErrorMessage,
+  isNullOrUndefined,
+  getErrorMessage,
+} from './util';
 
-export type ErrorParameters = {
+export type ErrorCodeType = string | number;
 
-    /**
-     * Error code
-     */
-    code: string | number;
+export type ErrorParameters<TCode = ErrorCodeType> = {
+  /**
+   * Error code
+   */
+  code: TCode;
 
-    /**
-     * Overridden error message
-     */
-    message?: string | undefined;
+  /**
+   * Overridden error message
+   */
+  message?: string | undefined;
 
-    /**
-     * The main error occurred
-     */
-    error?: Error | undefined;
+  /**
+   * The main error occurred
+   */
+  error?: Error | undefined;
 };
 
-export abstract class ErrorBase extends Error {
+export abstract class ErrorBase<TCode = ErrorCodeType> extends Error {
+  /**
+   * Error code
+   */
+  public readonly code: TCode;
 
-    /**
-     * Error code
-     */
-    public readonly code: string | number;
+  /**
+   * Human-friendly error message
+   */
+  readonly message: string;
 
-    /**
-     * Human-friendly error message
-     */
-    readonly message: string;
-
-    constructor(config?: ErrorParameters) {
-
-        if (!config) { throw new Error('E_NO_CONFIG'); }
-
-        // generate error message
-        const errorMessage = getEitherDefaultOrPredefinedErrorMessage(config);
-
-        super(errorMessage);
-
-        this.code = config.code;
-        this.message = errorMessage;
-
-        if (config.error) {
-            // copy the default stacktrace
-            this.stack = config.error.stack;
-        }
-
-        // set stacktrace
-        Error.captureStackTrace(this, ErrorBase);
-
-        // Set prototype to make instanceOf enabled
-        Object.setPrototypeOf(this, ErrorBase.prototype);
+  constructor(opts?: ErrorParameters) {
+    if (isNullOrUndefined(opts) === true) {
+      throw new Error('E_NO_OPTIONS');
     }
+
+    // generate error message
+    const errorMessage = getErrorMessage(opts!.message, opts!.code);
+
+    super(errorMessage);
+
+    this.code = opts!.code;
+    this.message = errorMessage;
+
+    if (opts!.error) {
+      // copy the default stacktrace
+      this.stack = opts!.error.stack;
+    }
+
+    // set stacktrace
+    Error.captureStackTrace(this, ErrorBase);
+
+    // Set prototype to make instanceOf enabled
+    Object.setPrototypeOf(this, ErrorBase.prototype);
+  }
 }

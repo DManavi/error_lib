@@ -1,12 +1,4 @@
-.github/
-.nyc_output/
-coverage/
 
-src/
-test/
+**/*
 
-.gitignore
-.npmignore
-.env
-
-tsconfig.json
+!dist/**/*
