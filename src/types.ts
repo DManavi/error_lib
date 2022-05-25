@@ -1,6 +1,11 @@
-
+/**
+ * Error code type
+ */
 export type ErrorCodeType = string | number;
 
 export type ErrorOptions = {
-  code?: ErrorCodeType
-}
+  /**
+   * Error code
+   */
+  code?: ErrorCodeType;
+};
