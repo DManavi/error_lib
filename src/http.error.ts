@@ -3,7 +3,6 @@ import statusCodes, { getReasonPhrase } from 'http-status-codes';
 import { BaseError } from './base.error';
 import { ErrorOptions } from './types';
 
-
 export type HttpErrorOptions = ErrorOptions & {
   /**
    * Status code
