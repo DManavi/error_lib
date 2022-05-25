@@ -1,51 +1,45 @@
-# SpeedUP SMS notification
+# Packaged
 
-SpeedUP standard error library.
+[![NPM version][npm-image]](https://npmjs.org/package/error-lib)
+[![NPM downloads][downloads-image]](https://npmjs.org/package/error-lib)
+[![Build Status][github-actions-publish-npm-package]](https://github.com/DManavi/error_lib/actions/workflows/publish_npm_package.yml)
 
-[![NPM version][npm-image]][npm-url]
-[![NPM downloads][downloads-image]][downloads-url]
+## About
+
+The error-lib project helps developers having a unified error structure in their NodeJS/Browser (JavaScript/TypeScript) projects.
 
 ## Installation
 
+To install this package, run the command below.
+
+
 ```sh
-
-# NPM
-npm i @speedup/error --save
-
-# Yarn
-yarn install @speedup/error
-
+npm install error-lib
+yarn add error-lib
 ```
 
 ## Usage
 
+### CommonJS
+
 ```js
-
-const { ApplicationError, HttpError } = require('@speedup/error');
-
-throw new ApplicationError({
-    code: 'E_NOT_FOUND'
-});
-
+const {  } = require('error-lib');
 ```
 
-```ts
+### ES6/TypeScript
 
-import { ApplicationError, HttpError } from '@speedup/error';
-
-throw new ApplicationError({
-    code: 'E_NOT_FOUND'
-});
-
+```js
+import {  } from 'error-lib';
 ```
 
 And you're good to go!
 
 ## License
 
-MIT
+GPL v3
 
-[npm-image]: https://img.shields.io/npm/v/@speedup/error.svg?color=orange
-[npm-url]: https://npmjs.org/package/@speedup/error
-[downloads-image]: https://img.shields.io/npm/dt/@speedup/error.svg
-[downloads-url]: https://npmjs.org/package/@speedup/error
+[npm-image]: https://img.shields.io/npm/v/error-lib
+[npm-url]: https://npmjs.org/package/error-lib
+[github-actions-publish-npm-package]: https://github.com/DManavi/error_lib/actions/workflows/publish_npm_package.yml/badge.svg
+[downloads-image]: https://img.shields.io/npm/dw/error-lib
+[downloads-url]: https://npmjs.org/package/error-lib
