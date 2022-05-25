@@ -1,12 +1,8 @@
-/**
- * Module entry point
- */
-
-
-import { ApplicationError } from './application_error';
-import { HttpBadRequest } from './http_bad_request';
-import { ErrorBase } from './error_base';
-import { HttpError } from './http_error';
-import { MissingArgumentError } from './missing_argument_error';
-
-export { ApplicationError, HttpBadRequest, ErrorBase, HttpError, MissingArgumentError }
+// Base
+export * from './base.error';
+// Application
+export * from './application.error';
+export * from './missing_argument.error';
+// HTTP errors
+export * from './http.error';
+export * from './bad_request.http.error';
