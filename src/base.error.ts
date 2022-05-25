@@ -1,19 +1,13 @@
-import { isNullOrUndefined, isNonEmptyString } from './util';
+import { isNonEmptyString } from './util';
+import { ErrorCodeType, ErrorOptions } from './types';
 
-export type ErrorCodeType = string | number;
-
-export abstract class BaseError<TCode = ErrorCodeType> extends Error {
+export abstract class BaseError extends Error {
   /**
    * Error code
    */
-  public readonly code: TCode;
+  public readonly code: ErrorCodeType;
 
-  /**
-   * Human-friendly error message
-   */
-  readonly message: string;
-
-  constructor(message: string, error?: Error, code?: TCode) {
+  constructor(message?: string, error?: Error, opts?: ErrorOptions) {
     /* Validation phase */
     if (isNonEmptyString(message) === false) {
       throw new Error(`The message property should be a non-empty string.`);
@@ -22,9 +16,9 @@ export abstract class BaseError<TCode = ErrorCodeType> extends Error {
     /* Initialization phase */
     super(message);
 
-    this.message = message;
+    this.message = message || BaseError.name;
     this.stack = error?.stack;
-    this.code = isNullOrUndefined(code) === false ? code : BaseError.name as any;
+    this.code = opts?.code || BaseError.name;
 
     // set stacktrace
     Error.captureStackTrace(this, BaseError);
