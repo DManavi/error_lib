@@ -1,4 +1,3 @@
-import { isNonEmptyString } from './util';
 import { ErrorCodeType, ErrorOptions } from './types';
 
 export abstract class BaseError extends Error {
