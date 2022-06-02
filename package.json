@@ -1,6 +1,6 @@
 {
   "name": "error-lib",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "Standard Error Library for JavaScript/TypeScript projects (NodeJS & Browsers)",
   "main": "./dist/require/index.js",
   "module": "./dist/import/index.js",
