@@ -2,9 +2,9 @@ import statusCodes, { getReasonPhrase } from 'http-status-codes';
 
 import { HttpError, HttpErrorOptions } from './http.error';
 
-export type HttpNotFoundBaseErrorOptions = HttpErrorOptions & {};
+export type HttpNotFoundErrorOptions = HttpErrorOptions & {};
 
-export class HttpNotFoundBaseError<
+export class HttpNotFoundError<
   TResourceId = string | number | any,
 > extends HttpError {
   public readonly resourceType: string;
@@ -17,7 +17,7 @@ export class HttpNotFoundBaseError<
     }: { resourceType: string; resourceId: TResourceId },
     message?: string,
     error?: Error,
-    opts?: HttpNotFoundBaseErrorOptions,
+    opts?: HttpNotFoundErrorOptions,
   ) {
     /* Initialization phase */
     const parentConstructorProps: HttpErrorOptions = {
@@ -36,9 +36,9 @@ export class HttpNotFoundBaseError<
     this.resourceId = resourceId;
 
     // set stacktrace
-    Error.captureStackTrace(this, HttpNotFoundBaseError);
+    Error.captureStackTrace(this, HttpNotFoundError);
 
     // Set prototype to make instanceOf enabled
-    Object.setPrototypeOf(this, HttpNotFoundBaseError.prototype);
+    Object.setPrototypeOf(this, HttpNotFoundError.prototype);
   }
 }
