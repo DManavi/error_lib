@@ -1,6 +1,6 @@
 import statusCodes, { getReasonPhrase } from 'http-status-codes';
 
-import { BaseError } from './base.error';
+import { ApplicationError } from './application.error';
 import { ErrorOptions } from './types';
 
 export type HttpErrorOptions = ErrorOptions & {
@@ -20,8 +20,7 @@ export type HttpErrorOptions = ErrorOptions & {
   isHandled?: boolean;
 };
 
-export class HttpError extends BaseError {
-
+export class HttpError extends ApplicationError {
   /**
    * HTTP status regarding the error
    */
@@ -38,11 +37,15 @@ export class HttpError extends BaseError {
   public readonly isHandled?: boolean;
 
   constructor(message?: string, error?: Error, opts?: HttpErrorOptions) {
+    // initialize null/undefined properties
+    const _message = message || HttpError.name;
+
     /* Initialization phase */
-    super(message, error, opts);
+    super(_message, error, opts);
 
     this.statusCode = opts?.statusCode || statusCodes.INTERNAL_SERVER_ERROR;
-    this.statusMessage = opts?.statusMessage || getReasonPhrase(this.statusCode);
+    this.statusMessage =
+      opts?.statusMessage || getReasonPhrase(this.statusCode);
     this.isHandled = opts?.isHandled || false;
 
     // set stacktrace

@@ -5,8 +5,11 @@ import { ErrorOptions } from './types';
  * Application Error
  */
 export class ApplicationError extends BaseError {
-  constructor(message: string, error?: Error, opts?: ErrorOptions) {
-    super(message, error, opts);
+  constructor(message?: string, error?: Error, opts?: ErrorOptions) {
+    // initialize null/undefined properties
+    const _message = message || ApplicationError.name;
+
+    super(_message, error, opts);
 
     // set stacktrace
     Error.captureStackTrace(this, ApplicationError);

@@ -29,8 +29,11 @@ export class HttpBadRequestError<TError = any> extends HttpError {
       opts?.statusMessage || getReasonPhrase(parentConstructorProps.statusCode);
     parentConstructorProps.isHandled = opts?.isHandled || false;
 
+    // initialize null/undefined properties
+    const _message = message || HttpBadRequestError.name;
+
     /* Call the constructor with overrided parameters */
-    super(message, error, parentConstructorProps);
+    super(_message, error, parentConstructorProps);
 
     /* Class-specific parameters */
     this.clientErrors = opts?.clientErrors || [];

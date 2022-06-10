@@ -35,8 +35,11 @@ export class HttpForbiddenError<
       opts?.statusMessage || getReasonPhrase(parentConstructorProps.statusCode);
     parentConstructorProps.isHandled = opts?.isHandled || false;
 
+    // initialize null/undefined properties
+    const _message = message || HttpForbiddenError.name;
+
     /* Call the constructor with overridden parameters */
-    super(message, error, parentConstructorProps);
+    super(_message, error, parentConstructorProps);
 
     /* Class-specific parameters */
     this.userId = userId;
