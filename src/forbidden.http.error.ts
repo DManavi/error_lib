@@ -26,20 +26,13 @@ export class HttpForbiddenError<
     error?: Error,
     opts?: HttpForbiddenErrorOptions,
   ) {
-    /* Initialization phase */
-    const parentConstructorProps: HttpErrorOptions = {
+    super(message || HttpForbiddenError.name, error, {
       statusCode: opts?.statusCode || statusCodes.FORBIDDEN,
-    };
-
-    parentConstructorProps.statusMessage =
-      opts?.statusMessage || getReasonPhrase(parentConstructorProps.statusCode);
-    parentConstructorProps.isHandled = opts?.isHandled || false;
-
-    // initialize null/undefined properties
-    const _message = message || HttpForbiddenError.name;
-
-    /* Call the constructor with overridden parameters */
-    super(_message, error, parentConstructorProps);
+      statusMessage:
+        opts?.statusMessage ||
+        getReasonPhrase(opts?.statusCode || statusCodes.FORBIDDEN),
+      isHandled: opts?.isHandled || false,
+    });
 
     /* Class-specific parameters */
     this.userId = userId;

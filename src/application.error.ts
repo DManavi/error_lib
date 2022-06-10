@@ -6,10 +6,9 @@ import { ErrorOptions } from './types';
  */
 export class ApplicationError extends BaseError {
   constructor(message?: string, error?: Error, opts?: ErrorOptions) {
-    // initialize null/undefined properties
-    const _message = message || ApplicationError.name;
-
-    super(_message, error, opts);
+    super(message || ApplicationError.name, error, {
+      code: opts?.code || ApplicationError.name,
+    });
 
     // set stacktrace
     Error.captureStackTrace(this, ApplicationError);

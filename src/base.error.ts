@@ -7,13 +7,9 @@ export abstract class BaseError extends Error {
   public readonly code: ErrorCodeType;
 
   constructor(message?: string, error?: Error, opts?: ErrorOptions) {
-    // initialize null/undefined properties
-    const _message = message || BaseError.name;
+    super(message || BaseError.name);
 
-    /* Initialization phase */
-    super(_message);
-
-    this.message = _message;
+    this.message = message || BaseError.name;
     this.stack = error?.stack;
     this.code = opts?.code || BaseError.name;
 

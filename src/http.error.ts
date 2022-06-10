@@ -37,11 +37,9 @@ export class HttpError extends ApplicationError {
   public readonly isHandled?: boolean;
 
   constructor(message?: string, error?: Error, opts?: HttpErrorOptions) {
-    // initialize null/undefined properties
-    const _message = message || HttpError.name;
-
-    /* Initialization phase */
-    super(_message, error, opts);
+    super(message || HttpError.name, error, {
+      code: opts?.code || HttpError.name,
+    });
 
     this.statusCode = opts?.statusCode || statusCodes.INTERNAL_SERVER_ERROR;
     this.statusMessage =

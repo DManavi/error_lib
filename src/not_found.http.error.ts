@@ -19,20 +19,14 @@ export class HttpNotFoundError<
     error?: Error,
     opts?: HttpNotFoundErrorOptions,
   ) {
-    /* Initialization phase */
-    const parentConstructorProps: HttpErrorOptions = {
+    super(message || HttpNotFoundError.name, error, {
       statusCode: opts?.statusCode || statusCodes.NOT_FOUND,
-    };
-
-    parentConstructorProps.statusMessage =
-      opts?.statusMessage || getReasonPhrase(parentConstructorProps.statusCode);
-    parentConstructorProps.isHandled = opts?.isHandled || false;
-
-    // initialize null/undefined properties
-    const _message = message || HttpNotFoundError.name;
-
-    /* Call the constructor with overridden parameters */
-    super(_message, error, parentConstructorProps);
+      statusMessage:
+        opts?.statusMessage ||
+        getReasonPhrase(opts?.statusCode || statusCodes.NOT_FOUND),
+      code: opts?.code || HttpNotFoundError.name,
+      isHandled: opts?.isHandled || false,
+    });
 
     /* Class-specific parameters */
     this.resourceType = resourceType;
