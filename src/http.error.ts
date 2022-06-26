@@ -3,6 +3,8 @@ import statusCodes, { getReasonPhrase } from 'http-status-codes';
 import { ApplicationError } from './application.error';
 import { ErrorOptions } from './types';
 
+const CLASS_NAME = 'HttpError';
+
 export type HttpErrorOptions = ErrorOptions & {
   /**
    * Status code
@@ -37,8 +39,8 @@ export class HttpError extends ApplicationError {
   public readonly isHandled?: boolean;
 
   constructor(message?: string, error?: Error, opts?: HttpErrorOptions) {
-    super(message || HttpError.name, error, {
-      code: opts?.code || HttpError.name,
+    super(message || CLASS_NAME, error, {
+      code: opts?.code || CLASS_NAME,
     });
 
     this.statusCode = opts?.statusCode || statusCodes.INTERNAL_SERVER_ERROR;

@@ -2,6 +2,8 @@ import statusCodes, { getReasonPhrase } from 'http-status-codes';
 
 import { HttpError, HttpErrorOptions } from './http.error';
 
+const CLASS_NAME = 'HttpForbiddenError';
+
 export type HttpForbiddenErrorOptions = HttpErrorOptions & {};
 
 export class HttpForbiddenError<
@@ -26,7 +28,7 @@ export class HttpForbiddenError<
     error?: Error,
     opts?: HttpForbiddenErrorOptions,
   ) {
-    super(message || HttpForbiddenError.name, error, {
+    super(message || CLASS_NAME, error, {
       statusCode: opts?.statusCode || statusCodes.FORBIDDEN,
       statusMessage:
         opts?.statusMessage ||

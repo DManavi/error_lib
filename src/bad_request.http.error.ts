@@ -2,6 +2,8 @@ import statusCodes, { getReasonPhrase } from 'http-status-codes';
 
 import { HttpError, HttpErrorOptions } from './http.error';
 
+const CLASS_NAME = 'HttpBadRequestError';
+
 export type HttpBadRequestErrorOptions<TError = any> = HttpErrorOptions & {
   /**
    * Client errors
@@ -20,14 +22,14 @@ export class HttpBadRequestError<TError = any> extends HttpError {
     error?: Error,
     opts?: HttpBadRequestErrorOptions,
   ) {
-    super(message || HttpBadRequestError.name, error, {
+    super(message || CLASS_NAME, error, {
       statusCode: opts?.statusCode || statusCodes.BAD_REQUEST,
       statusMessage:
         opts?.statusMessage ||
         getReasonPhrase(opts?.statusCode || statusCodes.BAD_REQUEST),
       isHandled: opts?.isHandled || false,
 
-      code: opts?.code || HttpBadRequestError.name,
+      code: opts?.code || CLASS_NAME,
     });
 
     /* Class-specific parameters */

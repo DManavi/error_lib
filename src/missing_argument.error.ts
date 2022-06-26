@@ -6,6 +6,8 @@ import { BaseError } from './base.error';
 import { ErrorOptions } from './types';
 import { isNonEmptyString } from './util';
 
+const CLASS_NAME = 'MissingArgumentError';
+
 export type MissingArgumentErrorOptions = ErrorOptions & {
   /**
    * Name of the argument
@@ -33,7 +35,7 @@ export class MissingArgumentError extends BaseError {
     }
 
     super(message || `'${opts?.argumentName}' is missing.`, error, {
-      code: opts?.code || MissingArgumentError.name,
+      code: opts?.code || CLASS_NAME,
     });
 
     this.argumentName = opts?.argumentName!;

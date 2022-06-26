@@ -1,5 +1,7 @@
 import { ErrorCodeType, ErrorOptions } from './types';
 
+const CLASS_NAME = 'BaseError';
+
 export abstract class BaseError extends Error {
   /**
    * Error code
@@ -7,11 +9,11 @@ export abstract class BaseError extends Error {
   public readonly code: ErrorCodeType;
 
   constructor(message?: string, error?: Error, opts?: ErrorOptions) {
-    super(message || BaseError.name);
+    super(message || CLASS_NAME);
 
-    this.message = message || BaseError.name;
+    this.message = message || CLASS_NAME;
     this.stack = error?.stack;
-    this.code = opts?.code || BaseError.name;
+    this.code = opts?.code || CLASS_NAME;
 
     // set stacktrace
     Error.captureStackTrace(this, BaseError);
