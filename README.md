@@ -12,25 +12,22 @@ The error-lib project helps developers having a unified error structure in their
 
 To install this package, run the command below.
 
-
 ```sh
+# npm
 npm install error-lib
+# yarn
 yarn add error-lib
+# pnpm
+pnpm add error-lib
 ```
+
+## Diagram
+
+![error-lib diagram](./resources/diagram.png)
 
 ## Usage
 
-### CommonJS
-
-```js
-const {  } = require('error-lib');
-```
-
-### ES6/TypeScript
-
-```js
-import {  } from 'error-lib';
-```
+See the [docs](https://github.com/DManavi/error_lib/wiki)
 
 And you're good to go!
 

@@ -7,6 +7,12 @@ const CLASS_NAME = 'ApplicationError';
  * Application Error
  */
 export class ApplicationError extends BaseError {
+  /**
+   * @constructor
+   * @param {string | undefined} message Error message
+   * @param {ErrorOptions | undefined} opts Error options
+   * @returns {ApplicationError} New instance of the application error
+   */
   constructor(message?: string, opts?: ErrorOptions) {
     super(message ?? CLASS_NAME, {
       ...opts,
