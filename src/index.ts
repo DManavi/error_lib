@@ -1,10 +1,8 @@
 // Base
-export * from './base.error';
+export * from './base_error';
+export * from './types';
 // Application
-export * from './application.error';
-export * from './missing_argument.error';
-// HTTP errors
-export * from './http.error';
-export * from './bad_request.http.error';
-export * from './forbidden.http.error';
-export * from './not_found.http.error';
+export * from './application_error';
+export * from './bad_request';
+export * from './forbidden';
+export * from './not_found';

@@ -8,16 +8,15 @@ export abstract class BaseError extends Error {
    */
   public readonly code: ErrorCodeType;
 
-  constructor(message?: string, error?: Error, opts?: ErrorOptions) {
-    super(message || CLASS_NAME);
+  constructor(message?: string, opts?: ErrorOptions) {
+    super(message ?? CLASS_NAME);
 
-    this.message = message || CLASS_NAME;
-    this.stack = error?.stack;
-    this.code = opts?.code || CLASS_NAME;
+    this.message = message ?? CLASS_NAME;
+    this.stack = opts?.error?.stack;
+    this.code = opts?.code ?? CLASS_NAME;
 
     // set stacktrace
     Error.captureStackTrace(this, BaseError);
-
     // Set prototype to make instanceOf enabled
     Object.setPrototypeOf(this, BaseError.prototype);
   }
