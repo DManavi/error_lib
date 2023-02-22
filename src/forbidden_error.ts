@@ -1,56 +1,28 @@
-import { ApplicationError } from './application_error';
-import { ErrorOptions } from './types';
-import { safeGetProperty } from './utils';
+import {
+  ApplicationError,
+  ApplicationErrorConstructorOptions,
+} from './application_error';
 
-const CLASS_NAME = 'Forbidden';
+export interface ForbiddenErrorConstructorOptions<
+  TCauseError extends Error = Error,
+> extends ApplicationErrorConstructorOptions<TCauseError> {}
 
-export type ForbiddenErrorOptions<
-  TUserId = void,
-  TResourceType = void,
-  TResourceId = void,
-> = ErrorOptions &
-  (TUserId extends void ? {} : { userId: TUserId }) &
-  (TResourceType extends void ? {} : { resourceType: TResourceType }) &
-  (TResourceId extends void
-    ? {}
-    : {
-        resourceId: TResourceId;
-      });
-
-/**
- * ForbiddenError
- */
 export class ForbiddenError<
-  TUserId = void,
-  TResourceType = void,
-  TResourceId = void,
-> extends ApplicationError {
-  public readonly userId?: TUserId;
-  public readonly resourceType?: TResourceType;
-  public readonly resourceId?: TResourceId;
-
+  TCause extends Error = Error,
+> extends ApplicationError<TCause> {
   /**
-   * @constructor
-   * @param {string | undefined} message Error message
-   * @param {ForbiddenErrorOptions | undefined} opts Error options
+   *
+   * @param message Custom error message
+   * @param opts Extra options
    */
   constructor(
     message?: string,
-    opts?: ForbiddenErrorOptions<TUserId, TResourceId>,
+    opts?: ForbiddenErrorConstructorOptions<TCause>,
   ) {
-    super(message ?? CLASS_NAME, {
-      error: opts?.error,
-      code: opts?.code ?? CLASS_NAME,
-    });
+    message = message ?? 'Forbidden';
 
-    /* Class-specific parameters */
-    this.userId = safeGetProperty<any>(opts, 'userId');
-    this.resourceType = safeGetProperty<any>(opts, 'resourceType');
-    this.resourceId = safeGetProperty<any>(opts, 'resourceId');
+    super(message, { cause: opts?.cause, code: 'E_FORBIDDEN' });
 
-    // set stacktrace
-    Error.captureStackTrace(this, ForbiddenError);
-    // Set prototype to make instanceOf enabled
-    Object.setPrototypeOf(this, ForbiddenError.prototype);
+    this.configureSubError(ForbiddenError);
   }
 }
