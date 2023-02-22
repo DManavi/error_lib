@@ -1,47 +1,28 @@
-import { ApplicationError } from './application_error';
-import { ErrorOptions } from './types';
-import { safeGetProperty } from './utils';
+import {
+  ApplicationError,
+  ApplicationErrorConstructorOptions,
+} from './application_error';
 
-const CLASS_NAME = 'NotFoundError';
+export interface NotFoundErrorConstructorOptions<
+  TCauseError extends Error = Error,
+> extends ApplicationErrorConstructorOptions<TCauseError> {}
 
-export type NotFoundErrorOptions<
-  TResourceType = void,
-  TResourceId = void,
-> = ErrorOptions &
-  (TResourceType extends void ? {} : { resourceType: TResourceType }) &
-  (TResourceId extends void
-    ? {}
-    : {
-        resourceId: TResourceId;
-      });
-
-/**
- * NotFoundError
- */
-export class HttpNotFoundError<
-  TResourceId = string | number | any,
-> extends ApplicationError {
-  public readonly resourceType: string;
-  public readonly resourceId?: TResourceId;
-
+export class NotFoundError<
+  TCause extends Error = Error,
+> extends ApplicationError<TCause> {
   /**
-   * @constructor
-   * @param {string | undefined} message Error message
-   * @param {NotFoundErrorOptions | undefined} opts Error options
+   *
+   * @param message Custom error message
+   * @param opts Extra options
    */
-  constructor(message?: string, opts?: NotFoundErrorOptions) {
-    super(message ?? CLASS_NAME, {
-      error: opts?.error,
-      code: opts?.code ?? CLASS_NAME,
-    });
+  constructor(
+    message?: string,
+    opts?: NotFoundErrorConstructorOptions<TCause>,
+  ) {
+    message = message ?? 'NotFoundError';
 
-    /* Class-specific parameters */
-    this.resourceType = safeGetProperty<any>(opts, 'resourceType');
-    this.resourceId = safeGetProperty<any>(opts, 'resourceId');
+    super(message, { cause: opts?.cause, code: 'E_NOT_FOUND' });
 
-    // set stacktrace
-    Error.captureStackTrace(this, HttpNotFoundError);
-    // Set prototype to make instanceOf enabled
-    Object.setPrototypeOf(this, HttpNotFoundError.prototype);
+    this.configureSubError(NotFoundError);
   }
 }
