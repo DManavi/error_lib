@@ -1,18 +1,23 @@
 {
   "name": "error-lib",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "Standard Error Library for JavaScript/TypeScript projects (NodeJS & Browsers)",
+  "type": "commonjs",
+  "files": [
+    "dist",
+    "LICENSE",
+    "README.md",
+    "package.json",
+    "package-lock.json"
+  ],
   "main": "./dist/require/index.js",
   "module": "./dist/import/index.js",
   "types": "./dist/types/index.d.ts",
   "exports": {
     ".": {
+      "types": "./dist/types/index.d.ts",
       "require": "./dist/require/index.js",
       "import": "./dist/import/index.js"
-    },
-    "./http": {
-      "require": "./dist/require/http/index.js",
-      "import": "./dist/import/http/index.js"
     }
   },
   "scripts": {
@@ -31,12 +36,18 @@
   },
   "keywords": [
     "error",
-    "http-error",
     "exception",
-    "errors"
+    "errors",
+    "try-catch",
+    "stacktrace",
+    "error-handler",
+    "error-handlers",
+    "error-class",
+    "error-classes",
+    "error-monitoring"
   ],
   "author": "Danial Manavi",
-  "license": "GPLV3",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/DManavi/error_lib/issues"
   },

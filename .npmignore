@@ -1,4 +1,5 @@
-
+# everything is ignored
 **/*
 
+# dist folder is allowed only
 !dist/**/*

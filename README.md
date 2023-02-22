@@ -4,6 +4,10 @@
 [![NPM downloads][downloads-image]](https://npmjs.org/package/error-lib)
 [![Build Status][github-actions-publish-npm-package]](https://github.com/DManavi/error_lib/actions/workflows/publish_npm_package.yml)
 
+## Deprecated
+
+This package is deprecated. Please use [@speedup/errors](https://www.npmjs.com/package/@speedup/error).
+
 ## About
 
 The error-lib project helps developers having a unified error structure in their NodeJS/Browser (JavaScript/TypeScript) projects.
