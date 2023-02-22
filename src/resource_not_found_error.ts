@@ -30,8 +30,12 @@ export class ResourceNotFoundError<
       message ??
       `ResourceNotFoundError: No ${resourceType} found having identifier '${resourceId}'`;
 
-    super(message, { cause: opts?.cause, code: 'E_RESOURCE_NOT_FOUND' });
+    super(message, {
+      cause: opts?.cause,
+      code: opts?.code ?? 'E_RESOURCE_NOT_FOUND',
+    });
 
-    this.configureSubError(ResourceNotFoundError);
+    Error.captureStackTrace(this, ResourceNotFoundError);
+    Object.setPrototypeOf(this, ResourceNotFoundError.prototype);
   }
 }

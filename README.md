@@ -4,10 +4,6 @@
 [![NPM downloads][downloads-image]](https://npmjs.org/package/error-lib)
 [![Build Status][github-actions-publish-npm-package]](https://github.com/DManavi/error_lib/actions/workflows/publish_npm_package.yml)
 
-## Deprecated
-
-This package is deprecated. Please use [@speedup/errors](https://www.npmjs.com/package/@speedup/error).
-
 ## About
 
 The error-lib project helps developers having a unified error structure in their NodeJS/Browser (JavaScript/TypeScript) projects.
@@ -31,13 +27,47 @@ pnpm add error-lib
 
 ## Usage
 
-See the [docs](https://github.com/DManavi/error_lib/wiki)
+To use any of the custom error libraries you need to simply import them in your typescript/javascript application.
+
+```js
+
+// for NodeJS applications (Common JS)
+const { ApplicationError, NotFoundError } = require('error-lib');
+
+try {
+
+  if (fileNotFound === true) {
+    throw new NotFoundError('config.json was not found');
+  }
+}
+catch (err) {
+
+  if (err instanceof NotFoundError) {
+    // 
+  }
+}
+
+```
+
+```ts
+
+// For typescript/javascript (ES Module)
+import { ApplicationError, NotFoundError } from 'error-lib';
+
+
+
+
+```
+
+## Extend / Custom errors
+
+
 
 And you're good to go!
 
 ## License
 
-GPL v3
+MIT
 
 [npm-image]: https://img.shields.io/npm/v/error-lib
 [npm-url]: https://npmjs.org/package/error-lib

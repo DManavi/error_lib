@@ -21,8 +21,9 @@ export class NotFoundError<
   ) {
     message = message ?? 'NotFoundError';
 
-    super(message, { cause: opts?.cause, code: 'E_NOT_FOUND' });
+    super(message, { cause: opts?.cause, code: opts?.code ?? 'E_NOT_FOUND' });
 
-    this.configureSubError(NotFoundError);
+    Error.captureStackTrace(this, NotFoundError);
+    Object.setPrototypeOf(this, NotFoundError.prototype);
   }
 }

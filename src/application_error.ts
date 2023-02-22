@@ -41,31 +41,7 @@ export class ApplicationError<TCause extends Error = Error> extends Error {
     this.code = opts?.code ?? 'E_APPLICATION_ERROR';
     this.cause = opts?.cause;
 
-    this.configureSubError(ApplicationError);
-  }
-
-  /**
-   * Configure sub error
-   * @param cls Constructor/class of the error
-   */
-  protected configureSubError<T>(cls: Class<T>) {
-    this.captureStackTrace(cls);
-    this.setPrototypeOf(cls);
-  }
-
-  /**
-   * Capture stack trace in the error
-   * @param cls Constructor/class of the error
-   */
-  private captureStackTrace<T>(cls: Class<T>) {
-    Error.captureStackTrace(this, cls);
-  }
-
-  /**
-   * Set prototype of the object to enable instanceOf operator
-   * @param cls Constructor/class of the error
-   */
-  private setPrototypeOf<T>(cls: Class<T>) {
-    Object.setPrototypeOf(this, cls.prototype);
+    Error.captureStackTrace(this, ApplicationError);
+    Object.setPrototypeOf(this, ApplicationError.prototype);
   }
 }

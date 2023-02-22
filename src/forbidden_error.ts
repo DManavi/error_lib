@@ -19,10 +19,11 @@ export class ForbiddenError<
     message?: string,
     opts?: ForbiddenErrorConstructorOptions<TCause>,
   ) {
-    message = message ?? 'Forbidden';
+    message = message ?? 'ForbiddenError';
 
-    super(message, { cause: opts?.cause, code: 'E_FORBIDDEN' });
+    super(message, { cause: opts?.cause, code: opts?.code ?? 'E_FORBIDDEN' });
 
-    this.configureSubError(ForbiddenError);
+    Error.captureStackTrace(this, ForbiddenError);
+    Object.setPrototypeOf(this, ForbiddenError.prototype);
   }
 }

@@ -22,10 +22,14 @@ export class ValidationError<
     message?: string,
     opts?: ValidationErrorConstructorOptions<TCause>,
   ) {
-    message = message ?? 'ValidationFailed';
+    message = message ?? 'ValidationError';
 
-    super(message, { cause: opts?.cause, code: 'E_VALIDATION_FAILED' });
+    super(message, {
+      cause: opts?.cause,
+      code: opts?.code ?? 'E_VALIDATION_FAILED',
+    });
 
-    this.configureSubError(ValidationError);
+    Error.captureStackTrace(this, ValidationError);
+    Object.setPrototypeOf(this, ValidationError.prototype);
   }
 }

@@ -19,10 +19,11 @@ export class BadRequestError<
     message?: string,
     opts?: BadRequestErrorConstructorOptions<TCause>,
   ) {
-    message = message ?? 'BadRequest';
+    message = message ?? 'BadRequestError';
 
-    super(message, { cause: opts?.cause, code: 'E_BAD_REQUEST' });
+    super(message, { cause: opts?.cause, code: opts?.code ?? 'E_BAD_REQUEST' });
 
-    this.configureSubError(BadRequestError);
+    Error.captureStackTrace(this, BadRequestError);
+    Object.setPrototypeOf(this, BadRequestError.prototype);
   }
 }

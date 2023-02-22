@@ -30,11 +30,15 @@ export class RouteNotFoundError<
     message =
       message ??
       `RouteNotFoundError: Route '${[method, route]
-        .filter((_) => typeof _ !== 'string' || _.length < 1)
+        .filter((_) => typeof _ === 'string' && _.length > 0)
         .join(': ')}' was not found`;
 
-    super(message, { cause: opts?.cause, code: 'E_ROUTE_NOT_FOUND' });
+    super(message, {
+      cause: opts?.cause,
+      code: opts?.code ?? 'E_ROUTE_NOT_FOUND',
+    });
 
-    this.configureSubError(RouteNotFoundError);
+    Error.captureStackTrace(this, RouteNotFoundError);
+    Object.setPrototypeOf(this, RouteNotFoundError.prototype);
   }
 }
