@@ -1,6 +1,6 @@
 {
   "name": "error-lib",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "Standard Error Library for JavaScript/TypeScript projects (NodeJS & Browsers)",
   "type": "commonjs",
   "files": [
