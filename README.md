@@ -1,222 +1,210 @@
+<div align="center">
+
 # error-lib
 
-[![NPM version][npm-image]](https://npmjs.org/package/error-lib)
-[![NPM downloads][downloads-image]](https://npmjs.org/package/error-lib)
-[![Build Status][github-actions-publish-npm-package]](https://github.com/DManavi/error_lib/actions/workflows/publish_npm_package.yml)
+**Typed, reusable application errors for JavaScript and TypeScript.**
 
-## About
+[![npm version](https://img.shields.io/npm/v/error-lib?logo=npm&color=cb3837)](https://www.npmjs.com/package/error-lib)
+[![weekly downloads](https://img.shields.io/npm/dw/error-lib?logo=npm)](https://www.npmjs.com/package/error-lib)
+[![license](https://img.shields.io/npm/l/error-lib)](./LICENSE)
 
-The error-lib project helps developers having a unified error structure in their NodeJS/Browser (JavaScript/TypeScript) projects.
+Create consistent errors with stable codes, typed causes, and reliable
+`instanceof` checks. CommonJS and ES module entry points are included.
+
+</div>
+
+## Why error-lib?
+
+- **Consistent error contracts** — every error exposes a `message`, `code`,
+  optional `cause`, and stack trace.
+- **Useful built-in categories** — start with common application, validation,
+  authorization, and not-found errors.
+- **TypeScript-friendly** — constructor options, causes, and specialized error
+  data are typed.
+- **Easy to extend** — derive domain-specific errors while retaining predictable
+  behavior.
+- **Ready for APIs and logs** — normalize an error into a serializable object
+  when it needs to cross a process boundary.
 
 ## Installation
 
-To install this package, run the command below.
+```sh
+npm install error-lib
+```
+
+<details>
+<summary>Using Yarn or pnpm</summary>
 
 ```sh
-# npm
-npm install error-lib
-# yarn
 yarn add error-lib
-# pnpm
+```
+
+```sh
 pnpm add error-lib
 ```
 
-## Diagram
+</details>
 
-![error-lib diagram](./resources/diagram.png)
+## Quick start
 
-## Usage
-
-To use any of the custom error libraries you need to simply import them in your typescript/javascript application.
-
-```js
-// for NodeJS applications (Common JS)
-const {
-  ApplicationError,
-  NotFoundError,
+```ts
+import {
   ForbiddenError,
-} = require('error-lib');
+  NotFoundError,
+  normalizeErrorObject,
+} from 'error-lib';
 
-// Let's suppose we have a snippet that reads the content of a file
-// 1) The first step is to check if the file exists.
-// 2) The second step is to check if current user has access to the file.
-
-const checkIfFileExist = (path) => {
-  // 'fs.exists' is a pseudo code
-  if (fs.exists(path) === false) {
-    throw new NotFoundError(`${path} was not found.`);
+function readDocument(documentId: string, canRead: boolean) {
+  if (!documentId) {
+    throw new NotFoundError('Document was not found');
   }
 
-  return true;
-};
-
-const readFileContent = (path) => {
-  if (fs.hasAccess(path) === false) {
-    throw new ForbiddenError(`User does not have access to '${path}'`);
+  if (!canRead) {
+    throw new ForbiddenError('You cannot access this document', {
+      code: 'E_DOCUMENT_ACCESS_DENIED',
+    });
   }
 
-  return 'dummy content';
-};
+  return { id: documentId };
+}
 
 try {
-  // step 1
-  checkIfFileExist('/path/to/file');
-
-  // step 2
-  const fileContent = readFileContent('/path/to/file');
-} catch (err) {
-  if (err instanceof NotFoundError) {
-    // now you have intellisense enabled
-    console.error('File not found!');
-  } else if (err instanceof ForbiddenError) {
-    // now you have intellisense enabled
-    console.error('No access to the file');
+  readDocument('doc-123', false);
+} catch (error) {
+  if (error instanceof ForbiddenError) {
+    console.error(error.code, error.message);
+    console.error(normalizeErrorObject(error));
   } else {
-    console.error('Something went wrong!');
+    throw error;
   }
 }
 ```
 
-```ts
-// For typescript/javascript (ES Module)
-import { ApplicationError, NotFoundError } from 'error-lib';
-
-// Let's suppose we have a snippet that reads the content of a file
-// 1) The first step is to check if the file exists.
-// 2) The second step is to check if current user has access to the file.
-
-const checkIfFileExist = (path) => {
-  // 'fs.exists' is a pseudo code
-  if (fs.exists(path) === false) {
-    throw new NotFoundError(`${path} was not found.`);
-  }
-
-  return true;
-};
-
-const readFileContent = (path) => {
-  if (fs.hasAccess(path) === false) {
-    throw new ForbiddenError(`User does not have access to '${path}'`);
-  }
-
-  return 'dummy content';
-};
-
-try {
-  // step 1
-  checkIfFileExist('/path/to/file');
-
-  // step 2
-  const fileContent = readFileContent('/path/to/file');
-} catch (err) {
-  if (err instanceof NotFoundError) {
-    // now you have intellisense enabled
-    console.error('File not found!');
-  } else if (err instanceof ForbiddenError) {
-    // now you have intellisense enabled
-    console.error('No access to the file');
-  } else {
-    console.error('Something went wrong!');
-  }
-}
-```
-
-## Extend / Custom errors
-
-Not the errors created in this package supports all the scenarios. It's not even possible 😁.
-
-To add a new type of error that suits your needs, follow the instruction below.
-
-> It's always a good idea to extend errors from one of the main error types in this package. Unless you have your own reasons not to do so 😁.
+CommonJS is supported through the package's `require` entry point:
 
 ```js
-// Let's suppose you're adding an InvalidUsernamePassword error (which can be derived from BadRequestError).
+const { ApplicationError, NotFoundError } = require('error-lib');
+```
 
-// invalid_username_password_error.ts
-const { BadRequestError } = require('error-lib');
+## Built-in errors
 
-class InvalidUsernamePassword extends BadRequestError {
-  /**
-   *
-   * @param message {string} Custom error message
-   * @param opts Extra options
-   */
-  constructor(message, opts) {
-    message = message ?? 'InvalidUsernamePasswordError';
+All specialized errors inherit from `ApplicationError`, which itself extends the
+native `Error` class.
 
-    super(message, {
-      cause: opts?.cause,
-      code: opts?.code ?? 'E_INVALID_USERNAME_PASSWORD',
+| Export | Default code | Additional data |
+| --- | --- | --- |
+| `ApplicationError` | `E_APPLICATION_ERROR` | — |
+| `BadRequestError` | `E_BAD_REQUEST` | — |
+| `ValidationError` | `E_VALIDATION_FAILED` | `validationError` |
+| `ForbiddenError` | `E_FORBIDDEN` | — |
+| `NotFoundError` | `E_NOT_FOUND` | — |
+| `ResourceNotFoundError` | `E_RESOURCE_NOT_FOUND` | `resourceId`, `resourceType` |
+| `RouteNotFoundError` | `E_ROUTE_NOT_FOUND` | `route`, `method` |
+
+Each constructor accepts an optional custom message and options containing a
+custom `code` and typed `cause`. Specialized errors that carry extra data accept
+that data before the message and options.
+
+```ts
+import { ResourceNotFoundError } from 'error-lib';
+
+throw new ResourceNotFoundError(
+  'user-42',
+  'User',
+  'The requested user does not exist',
+  { code: 'E_USER_NOT_FOUND' },
+);
+```
+
+## Error hierarchy
+
+![Inheritance hierarchy for the errors exported by error-lib](./resources/diagram.png)
+
+## Preserve the original cause
+
+Use `cause` to retain the error that led to the application error:
+
+```ts
+import { ApplicationError } from 'error-lib';
+
+try {
+  await saveRecord();
+} catch (cause) {
+  if (cause instanceof Error) {
+    throw new ApplicationError('Could not save the record', {
+      code: 'E_RECORD_SAVE_FAILED',
+      cause,
     });
-
-    Error.captureStackTrace(this, InvalidUsernamePassword);
-    Object.setPrototypeOf(this, InvalidUsernamePassword.prototype);
   }
-}
 
-module.exports = {
-  InvalidUsernamePassword,
-};
-
-// in your application (e.g. app.js)
-// Now you can use your new error class to throw more specific errors
-
-if (user !== 'user1' && pass !== 'p4$sw0rd!') {
-  throw new InvalidUsernamePassword();
+  throw cause;
 }
 ```
 
+## Serialize an error
+
+Native error properties such as `message` and `stack` are not enumerable.
+`normalizeErrorObject` copies them into a JSON-safe object for structured
+logging or API responses.
+
 ```ts
-// Let's suppose you're adding an InvalidUsernamePassword error (which can be derived from BadRequestError).
+import { NotFoundError, normalizeErrorObject } from 'error-lib';
 
-// invalid_username_password_error.ts
+const error = new NotFoundError('Order 123 was not found');
+const payload = normalizeErrorObject(error);
 
-import { BadRequestError, BadRequestErrorConstructorOptions } from 'error-lib';
+console.log(JSON.stringify(payload));
+```
 
-export interface InvalidUsernamePasswordConstructorOptions<
-  TCauseError extends Error = Error,
-> extends BadRequestErrorConstructorOptions<TCauseError> {}
+## Create a custom error
 
-export class InvalidUsernamePassword<
+Extend the closest built-in error and provide a stable domain-specific code:
+
+```ts
+import {
+  BadRequestError,
+  BadRequestErrorConstructorOptions,
+} from 'error-lib';
+
+export class InvalidCredentialsError<
   TCause extends Error = Error,
 > extends BadRequestError<TCause> {
-  /**
-   *
-   * @param message Custom error message
-   * @param opts Extra options
-   */
   constructor(
-    message?: string,
-    opts?: InvalidUsernamePasswordConstructorOptions<TCause>,
+    message = 'The supplied credentials are invalid',
+    options?: BadRequestErrorConstructorOptions<TCause>,
   ) {
-    message = message ?? 'InvalidUsernamePasswordError';
-
     super(message, {
-      cause: opts?.cause,
-      code: opts?.code ?? 'E_INVALID_USERNAME_PASSWORD',
+      cause: options?.cause,
+      code: options?.code ?? 'E_INVALID_CREDENTIALS',
     });
 
-    Error.captureStackTrace(this, InvalidUsernamePassword);
-    Object.setPrototypeOf(this, InvalidUsernamePassword.prototype);
+    Error.captureStackTrace(this, InvalidCredentialsError);
+    Object.setPrototypeOf(this, InvalidCredentialsError.prototype);
   }
-}
-
-// in your application (e.g. app.ts)
-// Now you can use your new error class to throw more specific errors
-
-if (user !== 'user1' && pass !== 'p4$sw0rd!') {
-  throw new InvalidUsernamePassword();
 }
 ```
 
-And you're good to go!
+The custom error remains compatible with checks at every level of the hierarchy:
+
+```ts
+const error = new InvalidCredentialsError();
+
+error instanceof InvalidCredentialsError; // true
+error instanceof BadRequestError;         // true
+error instanceof Error;                   // true
+```
+
+## Development
+
+```sh
+npm ci
+npm test
+npm run build
+```
+
+Bug reports and feature requests are welcome in
+[GitHub Issues](https://github.com/DManavi/error_lib/issues).
 
 ## License
 
-MIT
-
-[npm-image]: https://img.shields.io/npm/v/error-lib
-[npm-url]: https://npmjs.org/package/error-lib
-[github-actions-publish-npm-package]: https://github.com/DManavi/error_lib/actions/workflows/publish_npm_package.yml/badge.svg
-[downloads-image]: https://img.shields.io/npm/dw/error-lib
-[downloads-url]: https://npmjs.org/package/error-lib
+[MIT](./LICENSE) © Danial Manavi
